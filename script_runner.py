@@ -12,10 +12,8 @@ class tool_manager:
         pass
 
     def list_files(self):
-        file_list = []
-
         for k in self.file_dict:
-            pass
+            print(f'{self.file_dict[k]} - {k}')
 
 def get_filename():
     filename = sys.argv[1]
