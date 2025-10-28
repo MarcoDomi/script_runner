@@ -69,11 +69,7 @@ def main():
     result = subprocess.run(['python3', script_path], capture_output=True, check=True)
     print(result.stdout.decode().strip())
 
-def class_tester(): #NOTE delete later
-    foo = tool_manager()
-    foo.update_dict()
-    foo.list_files()
 
 
-# main()
-class_tester()
+main()
+
