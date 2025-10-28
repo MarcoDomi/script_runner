@@ -15,12 +15,14 @@ class tool_manager:
 
         diff_set = dir_set.difference(dict_set) #filenames that are present in directory but not in file dictionary
 
-        for f in diff_set:
-            pass
+        for filename in diff_set:
+            abbrev = input(f"{filename} - enter abbreviated name: ")
+            self.file_dict.update({abbrev:filename})
 
     def list_files(self):
         '''print a list of files and it's abbreviation'''
-        for filename, abbrev in self.file_dict.items():
+        print(f"Filename   short name\n{'-'*7}")
+        for abbrev, filename in self.file_dict.items():
             print(f"{filename} - {abbrev}")
 
     def _create_set(self,mode): 
@@ -70,6 +72,7 @@ def main():
 def class_tester(): #NOTE delete later
     foo = tool_manager()
     foo.update_dict()
+    foo.list_files()
 
 
 # main()
