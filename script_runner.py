@@ -10,8 +10,8 @@ class tool_manager:
         self.file_dict = {}
 
     def update_dict(self):
-        dict_set = self._create_dict_set()
-        dir_set = self._create_dir_set()
+        dict_set = self._create_set('dict')
+        dir_set = self._create_set('dir')
 
         diff_set = dir_set.difference(dict_set) #filenames that are present in directory but not in file dictionary
 
@@ -23,23 +23,22 @@ class tool_manager:
         for filename, abbrev in self.file_dict.items():
             print(f"{filename} - {abbrev}")
 
-    def _create_dict_set(self): 
-        '''returns a set created from file dictionary'''
+    def _create_set(self,mode): 
+        '''returns a set created from either file dictionary or from files in directory'''
 
-        dict_set = set()
-        for _, value in self.file_dict:
-            dict_set.add(value)
+        new_set = set()
 
-        return dict_set
+        if mode == 'dict':
+            for _, value in self.file_dict:
+                new_set.add(value)
 
-    def _create_dir_set(self):
-        '''iterate thru all elements in dictionary to create a set'''
-        dir_set = set()
-        for f in pathlib.Path.iterdir(CURR_PATH):
-            if f.name[-3:] == '.py' and f.name != 'script_runner.py':
-                dir_set.add(f.name)
+        elif mode == 'dir':
+            for f in pathlib.Path.iterdir(CURR_PATH):
+                if f.name[-3:] == '.py' and f.name != 'script_runner.py':
+                    new_set.add(f.name)
 
-        return dir_set
+        return new_set
+
 
 
 def get_filename():
