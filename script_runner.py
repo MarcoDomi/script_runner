@@ -4,12 +4,13 @@ import sys
 import subprocess
 import pathlib
 
-CURR_PATH = pathlib.Path(__file__).parent
+CURR_PATH = pathlib.Path(__file__).parent #NOTE remove when a glob solution is implemeted for _create_set()
 class tool_manager:
+    '''enable retrieval of python script file name using a user specfied abbreviation'''
     def __init__(self):
         self.file_dict = {}
 
-    def __getitem__(self, abbrev):
+    def __getitem__(self, abbrev): #use angle brackets to retrieve filename from dictionary
         try:
             return self.file_dict.get(abbrev)
         except KeyError:
@@ -19,13 +20,13 @@ class tool_manager:
         dict_set = self._create_set('dict')
         dir_set = self._create_set('dir')
 
-        diff_set = dir_set.difference(dict_set) #filenames that are present in directory but not in file dictionary
+        diff_set = dir_set.difference(dict_set) #filenames that are present in directory but not in the class dictionary
 
-        for filename in diff_set:
-            abbrev = input(f"{filename} - enter abbreviated name: ")
+        for filename in diff_set: 
+            abbrev = input(f"{filename} - enter abbreviated name: ") 
             self.file_dict.update({abbrev:filename})
 
-    def list_files(self):
+    def list_files(self): #NOTE create a better formatted list
         '''print a list of files and it's abbreviation'''
         print(f"Filename   short name\n{'-'*7}")
         for abbrev, filename in self.file_dict.items():
@@ -41,7 +42,7 @@ class tool_manager:
                 new_set.add(value)
 
         elif mode == 'dir':
-            for f in pathlib.Path.iterdir(CURR_PATH):
+            for f in pathlib.Path.iterdir(CURR_PATH): #NOTE experiment with glob syntax
                 if f.name[-3:] == '.py' and f.name != 'script_runner.py':
                     new_set.add(f.name)
 
@@ -61,7 +62,7 @@ def main():
         exit()
 
     option = sys.argv[1]
-    pytool = tool_manager()
+    pytool = tool_manager() #NOTE use pickle data structure persistance
 
     if option == 'list':
         pytool.list_files()
