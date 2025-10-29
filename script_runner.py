@@ -9,6 +9,12 @@ class tool_manager:
     def __init__(self):
         self.file_dict = {}
 
+    def __getitem__(self, abbrev):
+        try:
+            return self.file_dict.get(abbrev)
+        except KeyError:
+            return KeyError
+
     def update_dict(self):
         dict_set = self._create_set('dict')
         dir_set = self._create_set('dir')
@@ -43,15 +49,6 @@ class tool_manager:
 
 
 
-def get_filename():
-    filename = sys.argv[1]
-
-    if ".py" not in filename:
-        filename = filename + ".py"
-
-    return filename
-
-
 def get_scriptPath(filename):
     curr_path = pathlib.Path(__file__).parent #use .parent attr to remove script_runner.py from path
 
@@ -63,11 +60,26 @@ def main():
         print('Usage: python3 script_runner.py <filename.py>')
         exit()
 
-    filename = get_filename()
-    script_path = get_scriptPath(filename)
+    option = sys.argv[1]
+    pytool = tool_manager()
 
-    result = subprocess.run(['python3', script_path], capture_output=True, check=True)
-    print(result.stdout.decode().strip())
+    if option == 'list':
+        pytool.list_files()
+
+    elif option == 'update':
+        pytool.update_dict()
+
+    else: 
+        try:
+            filename = pytool[option]
+        except KeyError:
+
+            if ".py" not in filename:
+                filename = filename + ".py"
+
+        script_path = get_scriptPath(filename)
+        result = subprocess.run(['python3', script_path], capture_output=True, check=True)
+        print(result.stdout.decode().strip())
 
 
 
