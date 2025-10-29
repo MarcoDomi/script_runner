@@ -49,7 +49,6 @@ class tool_manager:
         return new_set
 
 
-
 def get_scriptPath(filename):
     curr_path = pathlib.Path(__file__).parent #use .parent attr to remove script_runner.py from path
 
@@ -76,11 +75,11 @@ def run_options(option, pytool):
         try:
             filename = pytool[file_arg]
         except KeyError:
-            filename - file_arg
+            filename = file_arg
             if '.py' not in file_arg:
                 filename = file_arg + '.py'
 
-    return filename
+        file_exec(filename)
 
 
 def main():
@@ -91,9 +90,7 @@ def main():
     option = sys.argv[1]
     pytool = tool_manager() #NOTE use pickle data structure persistance
 
-    file_to_run = run_options()
-    file_exec(file_to_run)
+    run_options(option, pytool)
 
 
 main()
-
