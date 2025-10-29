@@ -8,13 +8,13 @@ CURR_PATH = pathlib.Path(__file__).parent #NOTE remove when a glob solution is i
 class tool_manager:
     '''enable retrieval of python script file name using a user specfied abbreviation'''
     def __init__(self):
-        self.file_dict = {}
+        self.file_dict = dict()
 
     def __getitem__(self, abbrev): #use angle brackets to retrieve filename from dictionary
         try:
-            return self.file_dict.get(abbrev)
+            return self.file_dict[abbrev]
         except KeyError:
-            return KeyError
+            raise KeyError #incase abbrev not in file_dict
 
     def update_dict(self):
         dict_set = self._create_set('dict')
@@ -55,6 +55,13 @@ def get_scriptPath(filename):
 
     return curr_path.joinpath(filename)
 
+def file_exec(filename):
+    try:
+        script_path = get_scriptPath(filename)
+        result = subprocess.run(['python3', script_path], capture_output=True, check=True)
+        print(result.stdout.decode().strip())
+    except subprocess.CalledProcessError:
+        print("ERROR: file not found")
 
 def main():
     if len(sys.argv) < 2: #may remove in final version
@@ -71,16 +78,15 @@ def main():
         pytool.update_dict()
 
     else: 
+        file_arg = option
         try:
-            filename = pytool[option]
+            filename = pytool[file_arg]
         except KeyError:
+            filename = file_arg
+            if ".py" not in file_arg:
+                filename = file_arg + ".py"
 
-            if ".py" not in filename:
-                filename = filename + ".py"
-
-        script_path = get_scriptPath(filename)
-        result = subprocess.run(['python3', script_path], capture_output=True, check=True)
-        print(result.stdout.decode().strip())
+        file_exec(filename)
 
 
 
