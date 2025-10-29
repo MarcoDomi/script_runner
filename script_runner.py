@@ -63,6 +63,26 @@ def file_exec(filename):
     except subprocess.CalledProcessError:
         print("ERROR: file not found")
 
+
+def run_options(option, pytool):
+    if option == 'list':
+        pytool.list_files()
+
+    elif option == 'update':
+        pytool.update_dict()
+
+    else:
+        file_arg = option
+        try:
+            filename = pytool[file_arg]
+        except KeyError:
+            filename - file_arg
+            if '.py' not in file_arg:
+                filename = file_arg + '.py'
+
+    return filename
+
+
 def main():
     if len(sys.argv) < 2: #may remove in final version
         print('Usage: python3 script_runner.py <filename.py>')
@@ -71,23 +91,8 @@ def main():
     option = sys.argv[1]
     pytool = tool_manager() #NOTE use pickle data structure persistance
 
-    if option == 'list':
-        pytool.list_files()
-
-    elif option == 'update':
-        pytool.update_dict()
-
-    else: 
-        file_arg = option
-        try:
-            filename = pytool[file_arg]
-        except KeyError:
-            filename = file_arg
-            if ".py" not in file_arg:
-                filename = file_arg + ".py"
-
-        file_exec(filename)
-
+    file_to_run = run_options()
+    file_exec(file_to_run)
 
 
 main()
