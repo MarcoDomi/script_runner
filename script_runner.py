@@ -34,6 +34,9 @@ class tool_manager:
             abbrev = input(f"{filename} - enter abbreviated name: ") 
             self.file_dict.update({abbrev:filename})
 
+        with open(JSON_path, 'w') as file_json:
+            file_json.write(json.dumps(self.file_dict))
+
     def list_files(self): #NOTE create a better formatted list
         '''print a list of files and it's abbreviation'''
         print(f"Filename   short name\n{'-'*7}")
