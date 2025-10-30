@@ -60,14 +60,11 @@ class tool_manager:
         return new_set
 
 
-def get_scriptPath(filename):
-    curr_path = pathlib.Path(__file__).parent #use .parent attr to remove script_runner.py from path
 
-    return curr_path.joinpath(filename)
 
 def file_exec(filename):
     try:
-        script_path = get_scriptPath(filename)
+        script_path = CURR_PATH.joinpath(filename)
         result = subprocess.run(['python3', script_path], capture_output=True, check=True)
         print(result.stdout.decode().strip())
     except subprocess.CalledProcessError:
