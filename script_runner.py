@@ -3,18 +3,26 @@
 import sys
 import subprocess
 import pathlib
+import json
 
-CURR_PATH = pathlib.Path(__file__).parent #NOTE remove when a glob solution is implemeted for _create_set()
+CURR_PATH = pathlib.Path(__file__).parent #NOTE remove when a glob solution is implemented for _create_set()
+JSON_path = CURR_PATH.joinpath('dir_files.JSON')
+
 class tool_manager:
     '''enable retrieval of python script file name using a user specfied abbreviation'''
     def __init__(self):
-        self.file_dict = dict()
+        try:
+            with open(JSON_path, 'r') as f:
+                self.file_dict = json.load(f)
+        except:
+            print('ERROR: dir_files.JSON not found')
+            exit()
 
     def __getitem__(self, abbrev): #use angle brackets to retrieve filename from dictionary
         try:
             return self.file_dict[abbrev]
         except KeyError:
-            raise KeyError #incase abbrev not in file_dict
+            raise KeyError #in case abbrev not in file_dict
 
     def update_dict(self):
         dict_set = self._create_set('dict')
@@ -88,7 +96,7 @@ def main():
         exit()
 
     option = sys.argv[1]
-    pytool = tool_manager() #NOTE use pickle data structure persistance
+    pytool = tool_manager() 
 
     run_options(option, pytool)
 
