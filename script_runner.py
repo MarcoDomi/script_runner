@@ -18,11 +18,13 @@ class tool_manager:
             print('ERROR: dir_files.JSON not found')
             exit()
 
+
     def __getitem__(self, abbrev): #use angle brackets to retrieve filename from dictionary
         try:
             return self.file_dict[abbrev]
         except KeyError:
             raise KeyError #in case abbrev not in file_dict
+
 
     def update_dict(self):
         dict_set = self._create_set('dict')
@@ -35,13 +37,15 @@ class tool_manager:
             self.file_dict.update({abbrev:filename})
 
         with open(JSON_path, 'w') as file_json:
-            file_json.write(json.dumps(self.file_dict))
+            json.dump(self.file_dict,file_json)
 
-    def list_files(self): #NOTE create a better formatted list
-        '''print a list of files and it's abbreviation'''
-        print(f"Filename   short name\n{'-'*7}")
+
+    def list_files(self): 
+        '''print a list of files with it's abbreviation'''
+        print(f"Filename aliases\n{'-'*16}")
         for abbrev, filename in self.file_dict.items():
             print(f"{filename} - {abbrev}")
+
 
     def _create_set(self,mode): 
         '''returns a set created from either file dictionary or from files in directory'''
@@ -58,7 +62,6 @@ class tool_manager:
                     new_set.add(f.name)
 
         return new_set
-
 
 
 
