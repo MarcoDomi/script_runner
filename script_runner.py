@@ -18,15 +18,18 @@ class tool_manager:
             print('ERROR: dir_files.JSON not found')
             exit()
 
-
     def __getitem__(self, abbrev): #use angle brackets to retrieve filename from dictionary
         try:
             return self.file_dict[abbrev]
         except KeyError:
             raise KeyError #in case abbrev not in file_dict
 
-
     def update_dict(self):
+        '''add any new files and file abbreviations to class dictionary'''
+
+        #can't append new key-value pairs to json file. 
+        #must read data from json into dictionary, change the dictionary, then write data back to the json file
+             
         dict_set = self._create_set('dict')
         dir_set = self._create_set('dir')
 
@@ -36,9 +39,8 @@ class tool_manager:
             abbrev = input(f"{filename} - enter abbreviated name: ") 
             self.file_dict.update({abbrev:filename})
 
-        with open(JSON_path, 'w') as file_json:
+        with open(JSON_path, 'w') as file_json: 
             json.dump(self.file_dict,file_json)
-
 
     def list_files(self): 
         '''print a list of files with it's abbreviation'''
@@ -46,6 +48,10 @@ class tool_manager:
         for abbrev, filename in self.file_dict.items():
             print(f"{filename} - {abbrev}")
 
+    def init_json(self):
+        '''write empty brackets to json file'''
+        with open(JSON_path, 'w') as json_file:
+            json.dump({}, json_file)
 
     def _create_set(self,mode): 
         '''returns a set created from either file dictionary or from files in directory'''
@@ -64,7 +70,6 @@ class tool_manager:
         return new_set
 
 
-
 def file_exec(filename):
     try:
         script_path = CURR_PATH.joinpath(filename)
@@ -80,6 +85,9 @@ def run_options(option, pytool):
 
     elif option == 'update':
         pytool.update_dict()
+
+    elif option == 'init':
+        pytool.init_json()
 
     else:
         file_arg = option
@@ -102,6 +110,5 @@ def main():
     pytool = tool_manager() 
 
     run_options(option, pytool)
-
 
 main()
