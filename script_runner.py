@@ -69,9 +69,6 @@ class tool_manager:
 
         return new_set
 
-def file_case(file_arg): #TODO try using get .get dictionary method
-    pass
-
 
 def file_exec(filename):
     try:
@@ -82,24 +79,26 @@ def file_exec(filename):
         print("ERROR: file not found")
 
 
-def run_options(option, pytool):
-    options_dict = {'list': pytool.list_files, 'update': pytool.update_dict, 'init': pytool.init_json}
-
+def file_case(file_arg, pytool):  # TODO try using get .get dictionary method
     try:
-        pytool_method = options_dict[option]
-        pytool_method()
-
+        filename = pytool[file_arg]
     except KeyError:
-        file_arg = option
-        try:
-            filename = pytool[file_arg]
-        except KeyError:
-            filename = file_arg
-            if '.py' not in file_arg:
-                filename = file_arg + '.py'
+        filename = file_arg
+        if ".py" not in file_arg:
+            filename = file_arg + ".py"
 
-        file_exec(filename)
+    file_exec(filename)
 
+
+def run_options(option, pytool):
+    option_choices = {'list': pytool.list_files, 'update': pytool.update_dict, 'init': pytool.init_json}
+    run_option = option_choices.get(option, 'is-file')
+
+    if run_option == 'is-file':
+        file_case(option, pytool)
+    else:
+        run_option() 
+    
 
 def main():
     if len(sys.argv) < 2: #may remove in final version
