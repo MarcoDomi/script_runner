@@ -69,6 +69,9 @@ class tool_manager:
 
         return new_set
 
+def file_case(file_arg): #TODO try using get .get dictionary method
+    pass
+
 
 def file_exec(filename):
     try:
@@ -80,16 +83,13 @@ def file_exec(filename):
 
 
 def run_options(option, pytool):
-    if option == 'list':
-        pytool.list_files()
+    options_dict = {'list': pytool.list_files, 'update': pytool.update_dict, 'init': pytool.init_json}
 
-    elif option == 'update':
-        pytool.update_dict()
+    try:
+        pytool_method = options_dict[option]
+        pytool_method()
 
-    elif option == 'init':
-        pytool.init_json()
-
-    else:
+    except KeyError:
         file_arg = option
         try:
             filename = pytool[file_arg]
