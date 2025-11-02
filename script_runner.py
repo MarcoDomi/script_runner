@@ -44,7 +44,7 @@ class tool_manager:
 
     def list_files(self): 
         '''print a list of files with it's abbreviation'''
-        print(f"Filename aliases\n{'-'*16}")
+        print(f"FILENAME ALIASES\n{'-'*16}")
         for abbrev, filename in self.file_dict.items():
             print(f"{filename} - {abbrev}")
 
@@ -52,6 +52,16 @@ class tool_manager:
         '''write empty brackets to json file'''
         with open(JSON_path, 'w') as json_file:
             json.dump({}, json_file)
+
+    def list_options(self):
+        "print all options and a description"
+        print(f"OPTIONS\n{'-'*7}")
+        print("init - Initialize JSON file with an empy JSON object\n",
+              "update - Add new .py files to JSON\n",
+              "list - print list of python scripts and their abbreviation\n",
+              "help - print a list of utility options\n")
+
+
 
     def _create_set(self,mode): 
         '''returns a set created from either file dictionary or from files in directory'''
@@ -91,7 +101,7 @@ def file_case(file_arg, pytool):  # TODO try using get .get dictionary method
 
 
 def run_options(option, pytool):
-    option_choices = {'list': pytool.list_files, 'update': pytool.update_dict, 'init': pytool.init_json}
+    option_choices = {'list': pytool.list_files, 'update': pytool.update_dict, 'init': pytool.init_json, 'help': pytool.list_options}
     run_option = option_choices.get(option, 'is-file')
 
     if run_option == 'is-file':
