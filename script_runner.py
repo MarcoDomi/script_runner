@@ -59,7 +59,7 @@ class tool_manager:
         new_set = set()
 
         if mode == 'dict':
-            for _, value in self.file_dict:
+            for _, value in self.file_dict.items(): #NOTE each character in value is being stored in different variable.
                 new_set.add(value)
 
         elif mode == 'dir':
