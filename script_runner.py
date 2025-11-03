@@ -46,7 +46,7 @@ class tool_manager:
         '''print a list of files with it's abbreviation'''
         print(f"FILENAME ALIASES\n{'-'*16}")
         for abbrev, filename in self.file_dict.items():
-            print(f"{filename:<10}{abbrev:>5}")
+            print(f"{filename:15}{abbrev:>4}")
 
     def init_json(self):
         '''write empty brackets to json file'''
