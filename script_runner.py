@@ -27,9 +27,9 @@ class tool_manager:
     def update_dict(self):
         '''add any new files and file abbreviations to class dictionary'''
 
-        #can't append new key-value pairs to json file. 
-        #must read data from json into dictionary, change the dictionary, then write data back to the json file
-             
+        # can't append new key-value pairs to json file.
+        # must read data from json into dictionary, change the dictionary, then write data back to the json file
+
         dict_set = self._create_set('dict')
         dir_set = self._create_set('dir')
 
@@ -46,7 +46,7 @@ class tool_manager:
         '''print a list of files with it's abbreviation'''
         print(f"FILENAME ALIASES\n{'-'*16}")
         for abbrev, filename in self.file_dict.items():
-            print(f"{filename} - {abbrev}")
+            print(f"{filename:<10}{abbrev:>5}")
 
     def init_json(self):
         '''write empty brackets to json file'''
@@ -55,13 +55,17 @@ class tool_manager:
 
     def list_options(self):
         "print all options and a description"
+
+        option_list = [
+            ("init", "Initialize JSON file with an empy JSON object"),
+            ("update", "Add new .py files to JSON"),
+            ("list", "print list of python scripts and their abbreviation"),
+            ("help", "print a list of utility options"),
+        ]
+
         print(f"OPTIONS\n{'-'*7}")
-        print("init - Initialize JSON file with an empy JSON object\n",
-              "update - Add new .py files to JSON\n",
-              "list - print list of python scripts and their abbreviation\n",
-              "help - print a list of utility options\n")
-
-
+        for name, desc in option_list:
+            print(f"{name:>6} - {desc}")
 
     def _create_set(self,mode): 
         '''returns a set created from either file dictionary or from files in directory'''
@@ -108,7 +112,7 @@ def run_options(option, pytool):
         file_case(option, pytool)
     else:
         run_option() 
-    
+
 
 def main():
     if len(sys.argv) < 2: #may remove in final version
