@@ -1,5 +1,5 @@
 # script_runner
-A python script used to execute other scripts within the same directory or in sub-directories.
+Conveniently execute a specified Python script from any current working directory. 
 
-I will create an alias for this in Ubuntu and use this script runner to run any future scripts. this is to avoid creating a different alias 
-for each script i create in the future and avoid a bloated alias file.
+### Why 
+I wanted to create a tool similar to the Run command on windows so I can execute a script without having to navigate to that scripts' directory. script_runner.py can accept the full script name or an abbreviation for the script.
