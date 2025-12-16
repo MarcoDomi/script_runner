@@ -6,8 +6,9 @@ import pathlib
 import json
 
 CURR_PATH = pathlib.Path(__file__).parent #NOTE remove when a glob solution is implemented for _create_set()
-JSON_path = CURR_PATH.joinpath('dir_files.JSON')
+JSON_path = CURR_PATH.joinpath('dir_files.JSON') #create a path to dir_files.JSON which stores abbreviated name and a python script as a key-value pair
 
+#NOTE the tool_manager exists to enable running scripts using an abbreviation. it is not needed for actually running a script
 class tool_manager:
     '''enable retrieval of python script file name using a user specfied abbreviation'''
     def __init__(self):
@@ -18,11 +19,12 @@ class tool_manager:
             print('ERROR: dir_files.JSON not found')
             exit()
 
-    def __getitem__(self, abbrev): #use angle brackets to retrieve filename from dictionary
+    def __getitem__(self, abbrev): 
+        """use angle brackets to retrieve filename from a tool_manager object"""
         try:
             return self.file_dict[abbrev]
         except KeyError:
-            raise KeyError #in case abbrev not in file_dict
+            raise KeyError #in case abbreviation not in file_dict
 
     def update_dict(self):
         '''add any new files and file abbreviations to class dictionary'''
@@ -30,10 +32,10 @@ class tool_manager:
         # can't append new key-value pairs to json file.
         # must read data from json into dictionary, change the dictionary, then write data back to the json file
 
-        dict_set = self._create_set('dict')
-        dir_set = self._create_set('dir')
+        dict_set = self._create_set('dict') #create set of filenames present in dir_files.JSON
+        dir_set = self._create_set('dir')   #create set of filenames present in the parent directory of script_runner.py
 
-        diff_set = dir_set.difference(dict_set) #filenames that are present in directory but not in the class dictionary
+        diff_set = dir_set.difference(dict_set) #create set of filenames that are present in directory but not in the class dictionary
 
         for filename in diff_set: 
             abbrev = input(f"{filename} - enter abbreviated name: ") 
@@ -49,12 +51,12 @@ class tool_manager:
             print(f"{filename:15}{abbrev:>4}")
 
     def init_json(self):
-        '''write empty brackets to json file'''
+        '''write empty JSON object to dir_files.JSON'''
         with open(JSON_path, 'w') as json_file:
             json.dump({}, json_file)
 
     def list_options(self):
-        "print all options and a description"
+        "print all options for script_runner.py with a description"
 
         option_list = [
             ("init", "Initialize JSON file with an empy JSON object"),
@@ -68,7 +70,7 @@ class tool_manager:
             print(f"{name:>6} - {desc}")
 
     def _create_set(self,mode): 
-        '''returns a set created from either file dictionary or from files in directory'''
+        '''returns a set created from either dir_files.JSON or from the parent directory of script_runner.py '''
 
         new_set = set()
 
@@ -77,7 +79,7 @@ class tool_manager:
                 new_set.add(value)
 
         elif mode == 'dir':
-            for f in pathlib.Path.iterdir(CURR_PATH): #NOTE experiment with glob syntax
+            for f in pathlib.Path.iterdir(CURR_PATH): #NOTE use glob synatx to retrieve files that end in .py and exclude script_runner.py
                 if f.name[-3:] == '.py' and f.name != 'script_runner.py':
                     new_set.add(f.name)
 
@@ -85,6 +87,7 @@ class tool_manager:
 
 
 def file_exec(filename):
+    ''''''
     try:
         script_path = CURR_PATH.joinpath(filename)
         result = subprocess.run(['python3', script_path], capture_output=True, check=True)
@@ -93,7 +96,7 @@ def file_exec(filename):
         print("ERROR: file not found")
 
 
-def file_case(file_arg, pytool):  # TODO try using get .get dictionary method
+def file_case(file_arg, pytool):  
     try:
         filename = pytool[file_arg]
     except KeyError:
